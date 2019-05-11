@@ -409,6 +409,15 @@ namespace Oculus.Platform
     public static extern int ovr_Party_PluginGetSharedMemHandle();
 
     [DllImport(DLL_NAME, CallingConvention=CallingConvention.Cdecl)]
+    public static extern VoipMuteState ovr_Party_PluginGetVoipMicrophoneMuted();
+
+    [DllImport(DLL_NAME, CallingConvention=CallingConvention.Cdecl)]
+    public static extern bool ovr_Party_PluginGetVoipPassthrough();
+
+    [DllImport(DLL_NAME, CallingConvention=CallingConvention.Cdecl)]
+    public static extern SystemVoipStatus ovr_Party_PluginGetVoipStatus();
+
+    [DllImport(DLL_NAME, CallingConvention=CallingConvention.Cdecl)]
     public static extern void ovr_Voip_Accept(UInt64 userID);
 
     [DllImport(DLL_NAME, CallingConvention=CallingConvention.Cdecl)]
@@ -2270,6 +2279,9 @@ namespace Oculus.Platform
     public static extern IntPtr ovr_Message_GetPartyID(IntPtr obj);
 
     [DllImport(DLL_NAME, CallingConvention=CallingConvention.Cdecl)]
+    public static extern IntPtr ovr_Message_GetPartyUpdateNotification(IntPtr obj);
+
+    [DllImport(DLL_NAME, CallingConvention=CallingConvention.Cdecl)]
     public static extern IntPtr ovr_Message_GetPidArray(IntPtr obj);
 
     [DllImport(DLL_NAME, CallingConvention=CallingConvention.Cdecl)]
@@ -2408,6 +2420,42 @@ namespace Oculus.Platform
 
     [DllImport(DLL_NAME, CallingConvention=CallingConvention.Cdecl)]
     public static extern UInt64 ovr_PartyID_GetID(IntPtr obj);
+
+    [DllImport(DLL_NAME, CallingConvention=CallingConvention.Cdecl)]
+    public static extern PartyUpdateAction ovr_PartyUpdateNotification_GetAction(IntPtr obj);
+
+    [DllImport(DLL_NAME, CallingConvention=CallingConvention.Cdecl)]
+    public static extern UInt64 ovr_PartyUpdateNotification_GetPartyId(IntPtr obj);
+
+    [DllImport(DLL_NAME, CallingConvention=CallingConvention.Cdecl)]
+    public static extern UInt64 ovr_PartyUpdateNotification_GetSenderId(IntPtr obj);
+
+    public static string ovr_PartyUpdateNotification_GetUpdateTimestamp(IntPtr obj) {
+      var result = StringFromNative(ovr_PartyUpdateNotification_GetUpdateTimestamp_Native(obj));
+      return result;
+    }
+
+    [DllImport(DLL_NAME, CallingConvention=CallingConvention.Cdecl, EntryPoint="ovr_PartyUpdateNotification_GetUpdateTimestamp")]
+    private static extern IntPtr ovr_PartyUpdateNotification_GetUpdateTimestamp_Native(IntPtr obj);
+
+    public static string ovr_PartyUpdateNotification_GetUserAlias(IntPtr obj) {
+      var result = StringFromNative(ovr_PartyUpdateNotification_GetUserAlias_Native(obj));
+      return result;
+    }
+
+    [DllImport(DLL_NAME, CallingConvention=CallingConvention.Cdecl, EntryPoint="ovr_PartyUpdateNotification_GetUserAlias")]
+    private static extern IntPtr ovr_PartyUpdateNotification_GetUserAlias_Native(IntPtr obj);
+
+    [DllImport(DLL_NAME, CallingConvention=CallingConvention.Cdecl)]
+    public static extern UInt64 ovr_PartyUpdateNotification_GetUserId(IntPtr obj);
+
+    public static string ovr_PartyUpdateNotification_GetUserName(IntPtr obj) {
+      var result = StringFromNative(ovr_PartyUpdateNotification_GetUserName_Native(obj));
+      return result;
+    }
+
+    [DllImport(DLL_NAME, CallingConvention=CallingConvention.Cdecl, EntryPoint="ovr_PartyUpdateNotification_GetUserName")]
+    private static extern IntPtr ovr_PartyUpdateNotification_GetUserName_Native(IntPtr obj);
 
     public static string ovr_Pid_GetId(IntPtr obj) {
       var result = StringFromNative(ovr_Pid_GetId_Native(obj));
@@ -2712,6 +2760,9 @@ namespace Oculus.Platform
 
     [DllImport(DLL_NAME, CallingConvention=CallingConvention.Cdecl, EntryPoint="ovr_TestUser_GetUserAlias")]
     private static extern IntPtr ovr_TestUser_GetUserAlias_Native(IntPtr obj);
+
+    [DllImport(DLL_NAME, CallingConvention=CallingConvention.Cdecl)]
+    public static extern UInt64 ovr_TestUser_GetUserFbid(IntPtr obj);
 
     [DllImport(DLL_NAME, CallingConvention=CallingConvention.Cdecl)]
     public static extern UInt64 ovr_TestUser_GetUserId(IntPtr obj);
