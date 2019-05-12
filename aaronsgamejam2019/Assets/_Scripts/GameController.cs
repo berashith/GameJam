@@ -25,9 +25,12 @@ public class GameController : MonoBehaviour {
         addAction("Look in Soil Bucket", EarthHealer,  false, false, false, 4, null,            true,  characterSounds[2], false, null);
         addAction("Soil Bucket Speech",  EarthHealer,  false, false, false, 1, null,            true,  characterSounds[3], false, null);
 
-        PeopleHealer = addNPC("PeopleHealer", "PeopleHealer", new Vector3(14.5f, 1.2f, -5.9f), 1);
+        PeopleHealer = addNPC("PeopleHealer", "PeopleHealer", new Vector3(6.5f, 1.2f, -5.9f), 1);
         addAction("Surprised",           PeopleHealer, false, true,  false,  1, null, true, characterSounds[4], false, null);
         addAction("Screen Bucket",       PeopleHealer, false, false, false,  3, gazeObjects[0], true, characterSounds[5], false, null);
+
+        PeopleHealer = addNPC("ChildGuide", "ChildGuide", new Vector3(0.5f, 1.2f, 0.5f), 1);
+        PeopleHealer.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
 
 
     }
