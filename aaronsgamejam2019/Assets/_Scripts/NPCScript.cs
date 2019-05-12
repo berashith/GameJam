@@ -139,8 +139,8 @@ public class NPCScript : MonoBehaviour {
                     {
                         characterActions[actionIndex + 1].isReady = true;
                         Debug.Log(characterActions[actionIndex + 1].actionName + " is Ready");
-                        characterActions[actionIndex].isFinished = true;
                     }
+
                 }
 
             }
