@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class characterAction
 {
+    public string actionName = "Unnamed";
     public bool isReady = false;        // Can't trigger until ready
     public bool isTriggered = false;
     public bool isFinished = false; 
@@ -17,9 +18,12 @@ public class characterAction
      *  1 = Click       // Trigger when clicked
      *  2 = Proximity   // Trigger by proximity
      *  3 = Gaze        // Trigger by gaze
+     *  4 = Follow      // Trigger by following
      */
 
     public int triggerType;
+
+    public GameObject gazeObject;
 
     public bool actionSpeak = false;
     public bool actionFollow = false;
@@ -34,7 +38,8 @@ public class NPCScript : MonoBehaviour {
     public AudioSource NPCVoice;
 
 
-    public bool clicked;
+    public bool clicked = false;
+    public bool gazed = false;
 
     public List<characterAction> characterActions = new List<characterAction>();
 
@@ -48,6 +53,18 @@ public class NPCScript : MonoBehaviour {
         checkTriggers();
 	}
 
+    public void gazeReceived(GameObject target)
+    {
+        if (gazed == false)
+        {
+            gazed = true;
+            Debug.Log("GAZED");
+            checkTriggers(target);
+            gazed = false;
+        }
+    }
+
+
     public void clickNPC()
     {
         if (clicked == false)
@@ -60,20 +77,39 @@ public class NPCScript : MonoBehaviour {
     }
 
     // Run through all triggers in list. If one is ready but not triggered, and the trigger condition is met, trigger it.
-    void checkTriggers()
+    void checkTriggers(GameObject target = null)
     {
         // NOTE current system is linear: when one action is triggered, it readies the next action. Ideally, have a list of actions that get 'readied' upon activation / completion.
 
         int actionIndex = 0; 
         foreach (var actionItem in characterActions)
         {
+            // If we're speaking, wait until we're done before we start the next action
             if (actionItem.actionSpeak && NPCVoice.isPlaying) {
                 return;
             }
+
+            // Is it appropriate to trigger the action? Is it ready, untriggered and hasn't already been done?
             if (actionItem.isReady && !actionItem.isTriggered && !actionItem.isFinished)
             {
-                if (actionItem.triggerType == 1 && clicked == true)
+                bool triggerAction = false;
+                // Check Triggers
+                
+                // Instant Trigger
+                if (
+                    (actionItem.triggerType == 0)                       ||        // Instant Trigger
+                    (actionItem.triggerType == 1 && clicked == true)    ||        // Click Trigger
+                    (actionItem.triggerType == 3 && gazed == true && GameObject.ReferenceEquals(target, actionItem.gazeObject)) 
+                    ) {
+                    triggerAction = true;
+                }
+
+                // Do actions
+
+                // Deal with Click Actions
+                if (triggerAction)
                 {
+                    Debug.Log(characterName + " is triggering " + actionItem.actionName);
                     actionItem.isReady = false;
                     clicked = false;
                     actionItem.isTriggered = true;
@@ -85,12 +121,13 @@ public class NPCScript : MonoBehaviour {
                         NPCVoice.clip = actionItem.actionSound;
                         NPCVoice.Play(0);
                     }
+                    if (characterActions.Count > actionIndex + 1)
+                    {
+                        characterActions[actionIndex + 1].isReady = true;
+                    }
+
                 }
 
-                if (characterActions.Count > actionIndex + 1)
-                {
-                    characterActions[actionIndex + 1].isReady = true;
-                }
             }
             if (characterActions.Count > actionIndex + 1)
             {
