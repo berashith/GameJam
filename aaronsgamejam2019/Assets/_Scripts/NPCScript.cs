@@ -12,11 +12,16 @@ public class characterAction
 
     /*
      *  0 = Instant (as soon as "isReady" is true, trigger next Update()
-     *  1 = Click
-     *  2 = Proximity
+     *  1 = Click       // Trigger when clicked
+     *  2 = Proximity   // Trigger by proximity
+     *  3 = Gaze        // Trigger by gaze
      */
 
     public int triggerType;
+
+    public bool actionSpeak = false;
+    public bool actionFollow = false;
+    public bool actionLead = false;
 }
 
 public class NPCScript : MonoBehaviour {
