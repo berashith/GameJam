@@ -177,6 +177,7 @@ GameObject:
   - component: {fileID: 114763287400748566}
   - component: {fileID: 65835880324275384}
   - component: {fileID: 82373552926726442}
+  - component: {fileID: 114993941863054596}
   m_Layer: 0
   m_Name: NPC
   m_TagString: Untagged
@@ -708,9 +709,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 20
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -743,7 +744,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -862,6 +863,25 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: EasyInputVR.StandardControllers.StandardPointerClickReceiver+HitHandler,
       Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+--- !u!114 &114993941863054596
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1828144450752392}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e503ea6418d27594caa33b93cac1b06a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enableSpatialization: 1
+  gain: 0
+  useInvSqr: 0
+  near: 1
+  far: 20
+  volumetricRadius: 20
+  reverbSend: 0
+  enableRfl: 0
 --- !u!195 &195057176268652156
 NavMeshAgent:
   m_ObjectHideFlags: 1

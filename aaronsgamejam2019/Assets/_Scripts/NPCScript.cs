@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class characterAction
 {
+    public bool isReady = false;        // Can't trigger until ready
     public bool isTriggered = false;
-    public bool isReady = false;
+    public bool isFinished = false; 
+
     public bool isClicked = false;
     public AudioClip actionSound;
     public Vector3 navPoint;
@@ -51,28 +53,48 @@ public class NPCScript : MonoBehaviour {
         if (clicked == false)
         {
             clicked = true;
-            Debug.Log("CLICKED");
             checkTriggers();
+            clicked = false;
+
         }
     }
 
     // Run through all triggers in list. If one is ready but not triggered, and the trigger condition is met, trigger it.
     void checkTriggers()
     {
+        // NOTE current system is linear: when one action is triggered, it readies the next action. Ideally, have a list of actions that get 'readied' upon activation / completion.
+
+        int actionIndex = 0; 
         foreach (var actionItem in characterActions)
         {
-            if (actionItem.isReady && !actionItem.isTriggered)
+            if (actionItem.actionSpeak && NPCVoice.isPlaying) {
+                return;
+            }
+            if (actionItem.isReady && !actionItem.isTriggered && !actionItem.isFinished)
             {
                 if (actionItem.triggerType == 1 && clicked == true)
                 {
+                    actionItem.isReady = false;
+                    clicked = false;
                     actionItem.isTriggered = true;
-                    Debug.Log("TRIGGERED");
 
                     // Is it an audio trigger? If so, trigger it
-                    NPCVoice.clip = actionItem.actionSound;
-                    NPCVoice.Play(0);
-
+                    if (actionItem.actionSpeak)
+                    {
+                        // This should really be a coroutine. Ideally we should detect when it finished, so we can activate actions at start or end of audio.
+                        NPCVoice.clip = actionItem.actionSound;
+                        NPCVoice.Play(0);
+                    }
                 }
+
+                if (characterActions.Count > actionIndex + 1)
+                {
+                    characterActions[actionIndex + 1].isReady = true;
+                }
+            }
+            if (characterActions.Count > actionIndex + 1)
+            {
+                actionIndex++;
             }
         }
     }

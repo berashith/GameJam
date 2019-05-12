@@ -12,33 +12,55 @@ public class GameController : MonoBehaviour {
     void Start () {
         // Create Characters
 
-        // Set Vector3 to the coordinates you'd like them to be at.
-        var newNPC = Instantiate(NPCObj, new Vector3(14.5f, 1.2f, -5.9f), Quaternion.identity);
-        // These aren't used currently, but help us know who's who in the Editor.
-        newNPC.GetComponent<NPCScript>().characterName = "EarthHealer";
-        newNPC.GetComponent<NPCScript>().characterRole = "EarthHealer";
-
-
-        newNPC.GetComponent<NPCScript>().movementSpeed = 1; //NOT CURRENTLY IMPLEMENTED
-
-        // You can make as many actions as you like for the person. These consist of triggers, which when met cause some actions.
-        var newAction = new characterAction();
-        newAction.isTriggered = false;
-        newAction.isReady = true;
-        newAction.isClicked = false;
-        newAction.triggerType = 1; // Defined in NPCScript
-
-        newAction.actionSpeak = true;
-        // Check GameController in the Hierarchy to see what sounds are loaded in and find their index number.
-        newAction.actionSound = characterSounds[1];
-
-
-        newNPC.GetComponent<NPCScript>().characterActions.Add(newAction);
+        var EarthHealer = addNPC("EarthHealer", "EarthHealer", new Vector3(14.5f, 1.2f, -5.9f), 1);
+        addAction(EarthHealer, false, true,  false, 1, true, characterSounds[0]);
+        addAction(EarthHealer, false, false, false, 1, true, characterSounds[1]);
+        addAction(EarthHealer, false, false, false, 1, true, characterSounds[2]);
+        addAction(EarthHealer, false, false, false, 1, true, characterSounds[3]);
 
     }
 
-	// Update is called once per frame
-	void Update () {
+    GameObject addNPC(string characterName, string characterRole, Vector3 characterLocation, float movementSpeed)
+    {
+        var newNPC = Instantiate(NPCObj, characterLocation, Quaternion.identity);
+        // These aren't used currently, but help us know who's who in the Editor.
+        newNPC.GetComponent<NPCScript>().characterName = characterName;
+        newNPC.GetComponent<NPCScript>().characterRole = characterRole;
+
+        newNPC.GetComponent<NPCScript>().movementSpeed = movementSpeed; //NOT CURRENTLY IMPLEMENTED
+
+        return newNPC;
+
+    }
+
+    void addAction(GameObject targetNPC, bool isTriggered, bool isReady, bool isClicked, int triggerType, bool actionSpeak, AudioClip actionSound)
+    {
+        var newAction = new characterAction();
+        newAction.isTriggered = isTriggered;
+        newAction.isReady = isReady;
+        newAction.isClicked = isClicked;
+
+        /*
+         *  0 = Instant (as soon as "isReady" is true, trigger next Update()
+         *  1 = Click       // Trigger when clicked
+         *  2 = Proximity   // Trigger by proximity
+         *  3 = Gaze        // Trigger by gaze
+         */
+        newAction.triggerType = triggerType;
+
+        // If true, NPC will activate sound during this action.
+        newAction.actionSpeak = actionSpeak;
+
+        // Check GameController in the Hierarchy to see what sounds are loaded in and find their index number.
+        newAction.actionSound = actionSound;
+
+        targetNPC.GetComponent<NPCScript>().characterActions.Add(newAction);
+
+
+    }
+
+    // Update is called once per frame
+    void Update () {
 		
 	}
 }
