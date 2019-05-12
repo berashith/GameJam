@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameController : MonoBehaviour {
 
     public GameObject NPCObj;
+    public GameObject Player;
 
     public List<AudioClip> characterSounds  = new List<AudioClip>();
     public List<GameObject> gazeObjects     = new List<GameObject>();
@@ -17,20 +18,23 @@ public class GameController : MonoBehaviour {
     void Start () {
         // Create Characters
 
-        EarthHealer = addNPC("EarthHealer", "EarthHealer", new Vector3(14.5f, 1.2f, -5.9f), 1);
-        addAction("Speech 1", EarthHealer, false, true,  false, 1, null,            true, characterSounds[0]);
-        addAction("Speech 2", EarthHealer, false, false, false, 3, gazeObjects[0],  true, characterSounds[1]);
-        addAction("Speech 3", EarthHealer, false, false, false, 1, null,            true, characterSounds[2]);
-        addAction("Speech 4", EarthHealer, false, false, false, 1, null,            true, characterSounds[3]);
+        EarthHealer = addNPC("EarthHealer", "EarthHealer", new Vector3(4.1f, 1.2f, -97f), 1);
+        addAction("Good Choice",         EarthHealer,  false, true,  false, 1, null,            true,  characterSounds[0], false, null);
+        addAction("Bottle Bucket",       EarthHealer,  false, false, false, 3, gazeObjects[0],  true,  characterSounds[1], false, null);
+        addAction("Go To Soil Bucket",   EarthHealer,  false, false, false, 0, null,            false, null,               true,  locations[0]);
+        addAction("Look in Soil Bucket", EarthHealer,  false, false, false, 4, null,            true,  characterSounds[2], false, null);
+        addAction("Soil Bucket Speech",  EarthHealer,  false, false, false, 1, null,            true,  characterSounds[3], false, null);
 
-        
+        PeopleHealer = addNPC("PeopleHealer", "PeopleHealer", new Vector3(14.5f, 1.2f, -5.9f), 1);
+        addAction("Surprised",           PeopleHealer, false, true,  false,  1, null, true, characterSounds[4], false, null);
+        addAction("Screen Bucket",       PeopleHealer, false, false, false,  3, gazeObjects[0], true, characterSounds[5], false, null);
 
 
     }
 
     public void gazeReceived(GameObject target)
     {
-        if (target.name == "EarthHealer Bucket") {
+        if (target.name == "EarthHealer WaterBottle Bucket") {
             EarthHealer.GetComponent<NPCScript>().gazeReceived(target);
         }
     }
@@ -49,7 +53,7 @@ public class GameController : MonoBehaviour {
 
     }
 
-    void addAction(string actionName, GameObject targetNPC, bool isTriggered, bool isReady, bool isClicked, int triggerType, GameObject gazeObject, bool actionSpeak, AudioClip actionSound)
+    void addAction(string actionName, GameObject targetNPC, bool isTriggered, bool isReady, bool isClicked, int triggerType, GameObject gazeObject, bool actionSpeak, AudioClip actionSound, bool actionLead, GameObject actionLocation)
     {
         var newAction = new characterAction();
         newAction.actionName = actionName;
@@ -75,6 +79,9 @@ public class GameController : MonoBehaviour {
         newAction.actionSound = actionSound;
 
         targetNPC.GetComponent<NPCScript>().characterActions.Add(newAction);
+
+        newAction.actionLead = actionLead;
+        newAction.actionLocation = actionLocation;
     }
 
     // Update is called once per frame

@@ -7,11 +7,14 @@ public class characterAction
     public string actionName = "Unnamed";
     public bool isReady = false;        // Can't trigger until ready
     public bool isTriggered = false;
-    public bool isFinished = false; 
+    public bool isFinished = false;
+
+    public bool isTravelling = false;   // 
 
     public bool isClicked = false;
     public AudioClip actionSound;
     public Vector3 navPoint;
+
 
     /*
      *  0 = Instant (as soon as "isReady" is true, trigger next Update()
@@ -28,6 +31,8 @@ public class characterAction
     public bool actionSpeak = false;
     public bool actionFollow = false;
     public bool actionLead = false;
+
+    public GameObject actionLocation;
 }
 
 public class NPCScript : MonoBehaviour {
@@ -85,9 +90,10 @@ public class NPCScript : MonoBehaviour {
         foreach (var actionItem in characterActions)
         {
             // If we're speaking, wait until we're done before we start the next action
-            if (actionItem.actionSpeak && NPCVoice.isPlaying) {
+            if (NPCVoice.isPlaying) {
                 return;
             }
+
 
             // Is it appropriate to trigger the action? Is it ready, untriggered and hasn't already been done?
             if (actionItem.isReady && !actionItem.isTriggered && !actionItem.isFinished)
@@ -114,16 +120,25 @@ public class NPCScript : MonoBehaviour {
                     clicked = false;
                     actionItem.isTriggered = true;
 
-                    // Is it an audio trigger? If so, trigger it
+                    // Go through possible actions
+                    // Should we speak? If so, trigger it
                     if (actionItem.actionSpeak)
                     {
                         // This should really be a coroutine. Ideally we should detect when it finished, so we can activate actions at start or end of audio.
                         NPCVoice.clip = actionItem.actionSound;
                         NPCVoice.Play(0);
                     }
+
+                    // Should we move? If so, move
+                    if (actionItem.actionLead)
+                    {
+                        GetComponent<UnityEngine.AI.NavMeshAgent>().SetDestination(actionItem.actionLocation.transform.position);
+                    }
+
                     if (characterActions.Count > actionIndex + 1)
                     {
                         characterActions[actionIndex + 1].isReady = true;
+                        Debug.Log(characterActions[actionIndex + 1].actionName + " is Ready");
                     }
 
                 }
