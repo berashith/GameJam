@@ -53,6 +53,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\_Scripts\GameController.cs" />
+     <Compile Include="Assets\_Scripts\NPCScript.cs" />
      <Compile Include="Assets\_Scripts\PlayAudio1.cs" />
      <Compile Include="Assets\_Scripts\RotateAroundTree.cs" />
      <Compile Include="Assets\Easy Input for Gear VR\Scripts\Core\Datatypes\ButtonClick.cs" />
