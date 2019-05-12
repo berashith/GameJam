@@ -10416,7 +10416,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   deadZone: 0.5
-  sensitivity: 1
+  sensitivity: 0.3
   dpadMode: 0
   lookObject: {fileID: 1127116934}
 --- !u!114 &1333524652
