@@ -13,6 +13,7 @@ public class GameController : MonoBehaviour {
 
     private GameObject EarthHealer;
     private GameObject PeopleHealer;
+    private GameObject ChildGuide;
 
     // Use this for initialization
     void Start () {
@@ -29,8 +30,11 @@ public class GameController : MonoBehaviour {
         addAction("Surprised",           PeopleHealer, false, true,  false,  1, null, true, characterSounds[4], false, null);
         addAction("Screen Bucket",       PeopleHealer, false, false, false,  3, gazeObjects[0], true, characterSounds[5], false, null);
 
-        PeopleHealer = addNPC("ChildGuide", "ChildGuide", new Vector3(0.5f, 1.2f, 0.5f), 1);
+        PeopleHealer = addNPC("ChildGuide", "ChildGuide", new Vector3(2.7f, 1.2f, -108f), 1);
         PeopleHealer.transform.localScale = new Vector3(0.6f, 0.6f, 0.6f);
+
+        addAction("Follow", ChildGuide,         false, true,  false, 1, null, false, null, false, null);
+        addAction("Go To Healer", ChildGuide,   false, false, false, 0, null, false, null, true,  locations[1]);
 
 
     }
